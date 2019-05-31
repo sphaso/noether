@@ -166,4 +166,28 @@ defmodule Noether.Either do
     )
     |> Enum.reverse()
   end
+
+  @doc """
+  Given a value and two functions that return an Either, it applies the first one and returns the result if it matches `{:ok, _}`. Otherwise the second function is applied.
+
+  ## EXAMPLES
+    iex> choose(0, fn a -> {:ok, a + 1} end, fn b -> {:ok, b + 2} end)
+    {:ok, 1}
+
+    iex> choose(0, fn _ -> {:error, 1} end, fn b -> {:ok, b + 2} end)
+    {:ok, 2}
+
+    iex> choose(0, fn _ -> {:error, 1} end, fn _ -> {:error, 2} end)
+    {:error, 2}
+  """
+  @spec choose(either(), fun(), fun()) :: either()
+  def choose(a, f, g) do
+    b = f.(a)
+
+    if match?({:ok, _}, b) do
+      b
+    else
+      g.(a)
+    end
+  end
 end

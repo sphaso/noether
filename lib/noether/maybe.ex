@@ -88,4 +88,28 @@ defmodule Noether.Maybe do
     end)
     |> Enum.reverse()
   end
+
+  @doc """
+  Given a value and two functions, it applies the first one and returns the result if it's different from nil. Otherwise the second function is applied.
+
+  ## EXAMPLES
+    iex> choose(0, fn a -> a + 1 end, fn b -> b + 2 end)
+    1
+
+    iex> choose(0, fn _ -> nil end, fn b -> b + 2 end)
+    2
+
+    iex> choose(0, fn _ -> nil end, fn _ -> nil end)
+    nil
+  """
+  @spec choose(any(), fun(), fun()) :: any()
+  def choose(a, f, g) do
+    b = f.(a)
+
+    if is_nil(b) do
+      g.(a)
+    else
+      b
+    end
+  end
 end
