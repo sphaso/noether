@@ -73,14 +73,14 @@ defmodule Noether.Maybe do
   Given a list of values, the function is mapped only on the elements different from `nil`. `nil` values will be discarded. A list of the results is returned.
 
   ## EXAMPLES
-    iex> catMaybe([1], &(&1 + 1))
+    iex> cat_maybe([1], &(&1 + 1))
     [2]
 
-    iex> catMaybe([1, nil, 3], &(&1 + 1))
+    iex> cat_maybe([1, nil, 3], &(&1 + 1))
     [2, 4]
   """
-  @spec catMaybe([any()], fun()) :: [any()]
-  def catMaybe(list, f) do
+  @spec cat_maybe([any()], fun()) :: [any()]
+  def cat_maybe(list, f) do
     list
     |> Enum.reduce([], fn
       nil, acc -> acc

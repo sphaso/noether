@@ -148,14 +148,14 @@ defmodule Noether.Either do
   Given a list of Either, the function is mapped only on the elements of type `{:ok, _}`. Other values will be discarded. A list of the results is returned outside of the tuple.
 
   ## EXAMPLES
-    iex> catEither([{:ok, 1}], &(&1 + 1))
+    iex> cat_either([{:ok, 1}], &(&1 + 1))
     [2]
 
-    iex> catEither([{:ok, 1}, {:error, 2}, {:ok, 3}], &(&1 + 1))
+    iex> cat_either([{:ok, 1}, {:error, 2}, {:ok, 3}], &(&1 + 1))
     [2, 4]
   """
-  @spec catEither([either()], fun()) :: [any()]
-  def catEither(list, f) do
+  @spec cat_either([either()], fun()) :: [any()]
+  def cat_either(list, f) do
     list
     |> Enum.reduce(
       [],
