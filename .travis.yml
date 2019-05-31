@@ -2,5 +2,6 @@ language: elixir
 elixir: '1.8.2'
 
 script:
-  - MIX_ENV=test mix test
-  - mix check
+  - MIX_ENV=test mix compile --all-warnings --warnings-as-errors
+  - mix test
+  - travis_wait 30 mix check
