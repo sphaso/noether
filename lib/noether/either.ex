@@ -22,6 +22,42 @@ defmodule Noether.Either do
   def map(any = {:error, _}, _), do: any
 
   @doc """
+  Given an `{:ok, value}` and a function, it flats the ok unwrapping and applying the function on the `value` returning `{:ok, f.(value)}`.
+  If an `{:error, _}` is given, it is returned as-is.
+
+  ## EXAMPLES
+    iex> flat_map({:ok, {:ok, -1}}, &Kernel.abs/1)
+    {:ok, 1}
+
+    iex> flat_map({:ok, -1}, &Kernel.abs/1)
+    ** (FunctionClauseError) no function clause matching in Noether.Either.flat_map/2
+
+    iex> flat_map({:error, "Value not found"}, &Kernel.abs/1)
+    {:error, "Value not found"}
+  """
+  @spec flat_map(either(), fun()) :: either()
+  def flat_map({:ok, {:ok, a}}, f), do: {:ok, f.(a)}
+  def flat_map(any = {:error, _}, _), do: any
+
+  @doc """
+  Given an `{:ok, {:ok, value}}` it flat the ok unwrapping the `value` and returning `{:ok, value}`.
+  If an `{:error, _}` is given, it is returned as-is.
+
+  ## EXAMPLES
+    iex> flatten({:ok, {:ok, 1}})
+    {:ok, 1}
+
+    iex> flatten({:ok, 1})
+    ** (FunctionClauseError) no function clause matching in Noether.Either.flatten/1
+
+    iex> flatten({:error, "Value not found"})
+    {:error, "Value not found"}
+  """
+  @spec flatten(either()) :: either()
+  def flatten({:ok, {:ok, a}}), do: {:ok, a}
+  def flatten(any = {:error, _}), do: any
+
+  @doc """
   Given an `{:ok, value}` and a function that returns an Either value, it applies the function on the `value`. It effectively "squashes" an `{:ok, {:ok, v}}` or `{:ok, {:error, _}}` to its most appropriate representation.
   If an `{:error, _}` is given, it is returned as-is.
 
@@ -129,6 +165,20 @@ defmodule Noether.Either do
     )
     |> map(&Enum.reverse/1)
   end
+
+  @doc """
+  Given an Either and one function, it applies the function to `{:error, _}` tuple.
+
+  ## EXAMPLES
+    iex> map_error({:ok, 1}, &(&1 + 1))
+    {:ok, 1}
+
+    iex> map_error({:error, 1}, &(&1 + 1))
+    {:error, 2}
+  """
+  @spec map_error(either(), fun()) :: either()
+  def map_error(k = {:ok, _}, _), do: k
+  def map_error({:error, value}, f), do: {:error, f.(value)}
 
   @doc """
   Given an Either and two functions, it applies the first or second one on the second value of the tuple, depending if the value is `{:ok, _}` or `{:error, _` respectively.
