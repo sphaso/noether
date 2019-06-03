@@ -6,12 +6,13 @@ defmodule Noether.Maybe do
   @doc """
   Given a value and a function, the function is applied only if the value is different from `nil`. `nil` is returned otherwise.
 
-  ## EXAMPLES
-    iex> map(nil, &Kernel.abs/1)
-    nil
+  ## Examples
 
-    iex> map(-1, &Kernel.abs/1)
-    1
+      iex> map(nil, &Kernel.abs/1)
+      nil
+
+      iex> map(-1, &Kernel.abs/1)
+      1
   """
   @spec map(any(), fun()) :: any()
   def map(nil, _), do: nil
@@ -20,12 +21,13 @@ defmodule Noether.Maybe do
   @doc """
   Given a value and a default, `{:ok, value}` is returned only if the value is different from `nil`. `{:error, default}` is returned otherwise.
 
-  ## EXAMPLES
-    iex> required(nil, :hello)
-    {:error, :hello}
+  ## Examples
 
-    iex> required(1, :hello)
-    {:ok, 1}
+      iex> required(nil, :hello)
+      {:error, :hello}
+
+      iex> required(1, :hello)
+      {:ok, 1}
   """
   @spec required(any(), any()) :: Either.either()
   def required(nil, default), do: {:error, default}
@@ -34,12 +36,13 @@ defmodule Noether.Maybe do
   @doc """
   Given a list, it returns `{:ok, list}` if every element of the list is different from nil. Otherwise `{:error, :nil_found}` is returned.
 
-  ## EXAMPLES
-    iex> sequence([1, 2])
-    {:ok, [1, 2]}
+  ## Examples
 
-    iex> sequence([1, nil, 3])
-    {:error, :nil_found}
+      iex> sequence([1, 2])
+      {:ok, [1, 2]}
+
+      iex> sequence([1, nil, 3])
+      {:error, :nil_found}
   """
   @spec sequence([any()]) :: Either.either()
   def sequence(list) do
@@ -58,12 +61,13 @@ defmodule Noether.Maybe do
   @doc """
   Given a value, a function, and a default, it applies the function on the value if the latter is different from `nil`. It returns the default otherwise.
 
-  ## EXAMPLES
-    iex> maybe(-1, &Kernel.abs/1, :hello)
-    1
+  ## Examples
 
-    iex> maybe(nil, &Kernel.abs/1, :hello)
-    :hello
+      iex> maybe(-1, &Kernel.abs/1, :hello)
+      1
+
+      iex> maybe(nil, &Kernel.abs/1, :hello)
+      :hello
   """
   @spec maybe(any(), fun(), any()) :: any()
   def maybe(nil, _, default), do: default
@@ -72,12 +76,12 @@ defmodule Noether.Maybe do
   @doc """
   Given a list of values, the function is mapped only on the elements different from `nil`. `nil` values will be discarded. A list of the results is returned.
 
-  ## EXAMPLES
-    iex> cat_maybe([1], &(&1 + 1))
-    [2]
+  ## Examples
+      iex> cat_maybe([1], &(&1 + 1))
+      [2]
 
-    iex> cat_maybe([1, nil, 3], &(&1 + 1))
-    [2, 4]
+      iex> cat_maybe([1, nil, 3], &(&1 + 1))
+      [2, 4]
   """
   @spec cat_maybe([any()], fun()) :: [any()]
   def cat_maybe(list, f) do
@@ -92,15 +96,16 @@ defmodule Noether.Maybe do
   @doc """
   Given a value and two functions, it applies the first one and returns the result if it's different from nil. Otherwise the second function is applied.
 
-  ## EXAMPLES
-    iex> choose(0, fn a -> a + 1 end, fn b -> b + 2 end)
-    1
+  ## Examples
 
-    iex> choose(0, fn _ -> nil end, fn b -> b + 2 end)
-    2
+      iex> choose(0, fn a -> a + 1 end, fn b -> b + 2 end)
+      1
 
-    iex> choose(0, fn _ -> nil end, fn _ -> nil end)
-    nil
+      iex> choose(0, fn _ -> nil end, fn b -> b + 2 end)
+      2
+
+      iex> choose(0, fn _ -> nil end, fn _ -> nil end)
+      nil
   """
   @spec choose(any(), fun(), fun()) :: any()
   def choose(a, f, g) do
