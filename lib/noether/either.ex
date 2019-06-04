@@ -6,6 +6,8 @@ defmodule Noether.Either do
 
   @type either :: {:ok, any()} | {:error, any()}
 
+  @type fun1 :: (any() -> any())
+
   @doc """
   Given an `{:ok, value}` and a function, it applies the function on the `value` returning `{:ok, f.(value)}`.
   If an `{:error, _}` is given, it is returned as-is.
@@ -17,27 +19,9 @@ defmodule Noether.Either do
     iex> map({:error, "Value not found"}, &Kernel.abs/1)
     {:error, "Value not found"}
   """
-  @spec map(either(), fun()) :: either()
-  def map({:ok, a}, f), do: {:ok, f.(a)}
+  @spec map(either(), fun1()) :: either()
+  def map({:ok, a}, f) when is_function(f, 1), do: {:ok, f.(a)}
   def map(any = {:error, _}, _), do: any
-
-  @doc """
-  Given an `{:ok, value}` and a function, it flats the ok unwrapping and applying the function on the `value` returning `{:ok, f.(value)}`.
-  If an `{:error, _}` is given, it is returned as-is.
-
-  ## EXAMPLES
-    iex> flat_map({:ok, {:ok, -1}}, &Kernel.abs/1)
-    {:ok, 1}
-
-    iex> flat_map({:ok, -1}, &Kernel.abs/1)
-    ** (FunctionClauseError) no function clause matching in Noether.Either.flat_map/2
-
-    iex> flat_map({:error, "Value not found"}, &Kernel.abs/1)
-    {:error, "Value not found"}
-  """
-  @spec flat_map(either(), fun()) :: either()
-  def flat_map({:ok, {:ok, a}}, f), do: {:ok, f.(a)}
-  def flat_map(any = {:error, _}, _), do: any
 
   @doc """
   Given an `{:ok, {:ok, value}}` it flat the ok unwrapping the `value` and returning `{:ok, value}`.
@@ -55,6 +39,7 @@ defmodule Noether.Either do
   """
   @spec flatten(either()) :: either()
   def flatten({:ok, {:ok, a}}), do: {:ok, a}
+  def flatten({:ok, {:error, a}}), do: {:error, a}
   def flatten(any = {:error, _}), do: any
 
   @doc """
@@ -71,7 +56,7 @@ defmodule Noether.Either do
     iex> bind({:error, 1}, fn _ -> {:ok, 45} end)
     {:error, 1}
   """
-  @spec bind(either(), fun()) :: either()
+  @spec bind(either(), fun1()) :: either()
   def bind({:ok, a}, f), do: f.(a)
   def bind(any = {:error, _}, _), do: any
 
@@ -176,9 +161,9 @@ defmodule Noether.Either do
     iex> map_error({:error, 1}, &(&1 + 1))
     {:error, 2}
   """
-  @spec map_error(either(), fun()) :: either()
+  @spec map_error(either(), fun1()) :: either()
   def map_error(k = {:ok, _}, _), do: k
-  def map_error({:error, value}, f), do: {:error, f.(value)}
+  def map_error({:error, value}, f) when is_function(f, 1), do: {:error, f.(value)}
 
   @doc """
   Given an Either and two functions, it applies the first or second one on the second value of the tuple, depending if the value is `{:ok, _}` or `{:error, _` respectively.
@@ -190,9 +175,9 @@ defmodule Noether.Either do
     iex> either({:error, 1}, &(&1 + 1), &(&1 + 2))
     {:error, 3}
   """
-  @spec either(either(), fun(), fun()) :: either()
-  def either(k = {:ok, _}, f, _), do: map(k, f)
-  def either({:error, value}, _, g), do: {:error, g.(value)}
+  @spec either(either(), fun1(), fun1()) :: either()
+  def either(k = {:ok, _}, f, _) when is_function(f, 1), do: map(k, f)
+  def either({:error, value}, _, g) when is_function(g, 1), do: {:error, g.(value)}
 
   @doc """
   Given a list of Either, the function is mapped only on the elements of type `{:ok, _}`. Other values will be discarded. A list of the results is returned outside of the tuple.
@@ -204,8 +189,8 @@ defmodule Noether.Either do
     iex> cat_either([{:ok, 1}, {:error, 2}, {:ok, 3}], &(&1 + 1))
     [2, 4]
   """
-  @spec cat_either([either()], fun()) :: [any()]
-  def cat_either(list, f) do
+  @spec cat_either([either()], fun1()) :: [any()]
+  def cat_either(list, f) when is_function(f, 1) do
     list
     |> Enum.reduce(
       [],
@@ -230,8 +215,8 @@ defmodule Noether.Either do
     iex> choose(0, fn _ -> {:error, 1} end, fn _ -> {:error, 2} end)
     {:error, 2}
   """
-  @spec choose(either(), fun(), fun()) :: either()
-  def choose(a, f, g) do
+  @spec choose(either(), fun1(), fun1()) :: either()
+  def choose(a, f, g) when is_function(f, 1) and is_function(g, 1) do
     b = f.(a)
 
     if match?({:ok, _}, b) do
