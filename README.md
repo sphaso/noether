@@ -1,6 +1,6 @@
 # Noether
 
-[![Build Status](https://travis-ci.org/sphaso/noether.svg?branch=master)](https://travis-ci.org/sphaso/noether)
+[![Build Status](https://travis-ci.com/sphaso/noether.svg?branch=master)](https://travis-ci.com/sphaso/noether)
 
 Noether aims to ease common data manipulation tasks by introducing simple algebraic functions and other utilities.
 Functions and names are inspired (sometimes taken as-is) from Haskell.
