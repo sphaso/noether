@@ -27,13 +27,13 @@ defmodule Noether.Either do
 
   ## EXAMPLES
     iex> flat_map({:ok, {:ok, 1}}, &(&1 + 1))
-    {:ok, 1}
+    {:ok, 2}
 
     iex> flat_map({:ok, {:error, "Value not found"}}, &(&1 + 1))
     {:error, "Value not found"}
 
     iex> flat_map({:ok, 1}, &(&1 + 1))
-    ** (FunctionClauseError) no function clause matching in Noether.Either.flat_map/1
+    ** (FunctionClauseError) no function clause matching in Noether.Either.flat_map/2
 
     iex> flat_map({:error, "Value not found"}, &(&1 + 1))
     {:error, "Value not found"}
