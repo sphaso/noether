@@ -3,9 +3,7 @@ defmodule Noether.Either do
   This module hosts several utility functions to work with `{:ok, _} | {:error, _}` values.
   These type of values will be then called `Either`.
   """
-
   @type either :: {:ok, any()} | {:error, any()}
-
   @type fun1 :: (any() -> any())
 
   @doc """
@@ -28,19 +26,41 @@ defmodule Noether.Either do
   If an `{:error, _}` is given, it is returned as-is.
 
   ## EXAMPLES
-    iex> flatten({:ok, {:ok, 1}})
+    iex> flat_map({:ok, {:ok, 1}}, &(&1 + 1))
     {:ok, 1}
 
-    iex> flatten({:ok, 1})
-    ** (FunctionClauseError) no function clause matching in Noether.Either.flatten/1
+    iex> flat_map({:ok, {:error, "Value not found"}}, &(&1 + 1))
+    {:error, "Value not found"}
 
-    iex> flatten({:error, "Value not found"})
+    iex> flat_map({:ok, 1}, &(&1 + 1))
+    ** (FunctionClauseError) no function clause matching in Noether.Either.flat_map/1
+
+    iex> flat_map({:error, "Value not found"}, &(&1 + 1))
     {:error, "Value not found"}
   """
-  @spec flatten(either()) :: either()
-  def flatten({:ok, {:ok, a}}), do: {:ok, a}
-  def flatten({:ok, {:error, a}}), do: {:error, a}
-  def flatten(any = {:error, _}), do: any
+  @spec flat_map(either(), fun1()) :: either()
+  def flat_map({:ok, {:ok, a}}, f), do: {:ok, f.(a)}
+  def flat_map({:ok, {:error, a}}, _), do: {:error, a}
+  def flat_map(any = {:error, _}, _), do: any
+
+  @doc """
+  Given an `{:ok, {:ok, value}}` it flat the ok unwrapping the `value` and returning `{:ok, value}`.
+  If an `{:error, _}` is given, it is returned as-is.
+
+  ## EXAMPLES
+    iex> join({:ok, {:ok, 1}})
+    {:ok, 1}
+
+    iex> join({:ok, 1})
+    ** (FunctionClauseError) no function clause matching in Noether.Either.join/1
+
+    iex> join({:error, "Value not found"})
+    {:error, "Value not found"}
+  """
+  @spec join(either()) :: either()
+  def join({:ok, {:ok, a}}), do: {:ok, a}
+  def join({:ok, {:error, a}}), do: {:error, a}
+  def join(any = {:error, _}), do: any
 
   @doc """
   Given an `{:ok, value}` and a function that returns an Either value, it applies the function on the `value`. It effectively "squashes" an `{:ok, {:ok, v}}` or `{:ok, {:error, _}}` to its most appropriate representation.
