@@ -22,7 +22,7 @@ defmodule Noether.Either do
   def map(any = {:error, _}, _), do: any
 
   @doc """
-  Given an `{:ok, {:ok, value}}` it flat the ok unwrapping the `value` and returning `{:ok, value}`.
+  Given an `{:ok, {:ok, value}}` it flattens the ok unwrapping the `value` and returning `{:ok, value}`.
   If an `{:error, _}` is given, it is returned as-is.
 
   ## EXAMPLES
@@ -39,12 +39,12 @@ defmodule Noether.Either do
     {:error, "Value not found"}
   """
   @spec flat_map(either(), fun1()) :: either()
-  def flat_map({:ok, {:ok, a}}, f), do: {:ok, f.(a)}
+  def flat_map({:ok, {:ok, a}}, f) when is_function(f, 1), do: {:ok, f.(a)}
   def flat_map({:ok, {:error, a}}, _), do: {:error, a}
   def flat_map(any = {:error, _}, _), do: any
 
   @doc """
-  Given an `{:ok, {:ok, value}}` it flat the ok unwrapping the `value` and returning `{:ok, value}`.
+  Given an `{:ok, {:ok, value}}` it flattens the ok unwrapping the `value` and returning `{:ok, value}`.
   If an `{:error, _}` is given, it is returned as-is.
 
   ## EXAMPLES
@@ -77,7 +77,7 @@ defmodule Noether.Either do
     {:error, 1}
   """
   @spec bind(either(), fun1()) :: either()
-  def bind({:ok, a}, f), do: f.(a)
+  def bind({:ok, a}, f) when is_function(f, 1), do: f.(a)
   def bind(any = {:error, _}, _), do: any
 
   @doc """
@@ -172,7 +172,7 @@ defmodule Noether.Either do
   end
 
   @doc """
-  Given an Either and one function, it applies the function to `{:error, _}` tuple.
+  Given an Either and one function, it applies the function to the `{:error, _}` tuple.
 
   ## EXAMPLES
     iex> map_error({:ok, 1}, &(&1 + 1))
