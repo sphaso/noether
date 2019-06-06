@@ -20,7 +20,7 @@ defmodule Noether.Either do
   """
   @spec map(either(), fun1()) :: either()
   def map({:ok, a}, f) when is_function(f, 1), do: {:ok, f.(a)}
-  def map(any = {:error, _}, _), do: any
+  def map(a = {:error, _}, _), do: a
 
   @doc """
   Given an `{:ok, {:ok, value}}` it flattens the ok unwrapping the `value` and returning `{:ok, value}`.
@@ -43,7 +43,7 @@ defmodule Noether.Either do
   @spec flat_map(either(), fun1()) :: either()
   def flat_map({:ok, {:ok, a}}, f) when is_function(f, 1), do: {:ok, f.(a)}
   def flat_map({:ok, {:error, a}}, _), do: {:error, a}
-  def flat_map(any = {:error, _}, _), do: any
+  def flat_map(a = {:error, _}, _), do: a
 
   @doc """
   Given an `{:ok, {:ok, value}}` it flattens the ok unwrapping the `value` and returning `{:ok, value}`.
@@ -63,7 +63,7 @@ defmodule Noether.Either do
   @spec join(either()) :: either()
   def join({:ok, {:ok, a}}), do: {:ok, a}
   def join({:ok, {:error, a}}), do: {:error, a}
-  def join(any = {:error, _}), do: any
+  def join(a = {:error, _}), do: a
 
   @doc """
   Given an `{:ok, value}` and a function that returns an Either value, it applies the function on the `value`. It effectively "squashes" an `{:ok, {:ok, v}}` or `{:ok, {:error, _}}` to its most appropriate representation.
@@ -82,7 +82,7 @@ defmodule Noether.Either do
   """
   @spec bind(either(), fun1()) :: either()
   def bind({:ok, a}, f) when is_function(f, 1), do: f.(a)
-  def bind(any = {:error, _}, _), do: any
+  def bind(a = {:error, _}, _), do: a
 
   @doc """
   Given any value, it makes sure the result is an Either type.
@@ -99,9 +99,9 @@ defmodule Noether.Either do
       {:ok, 3}
   """
   @spec wrap(any()) :: either()
-  def wrap(k = {:ok, _}), do: k
-  def wrap(e = {:error, _}), do: e
-  def wrap(any), do: {:ok, any}
+  def wrap(a = {:ok, _}), do: a
+  def wrap(a = {:error, _}), do: a
+  def wrap(a), do: {:ok, a}
 
   @doc """
   It returns the value of an `{:ok, value}` only if such a tuple is given. If not, `nil` is returned.
@@ -115,7 +115,7 @@ defmodule Noether.Either do
       nil
   """
   @spec unwrap({:ok, any()}) :: any()
-  def unwrap({:ok, v}), do: v
+  def unwrap({:ok, a}), do: a
   def unwrap(_), do: nil
 
   @doc """
@@ -133,7 +133,7 @@ defmodule Noether.Either do
       false
   """
   @spec ok?(any()) :: boolean()
-  def ok?(any), do: match?({:ok, _}, any)
+  def ok?(a), do: match?({:ok, _}, a)
 
   @doc """
   It returns `true` only if the value given matches a `{:error, value}` type.
@@ -150,7 +150,7 @@ defmodule Noether.Either do
       false
   """
   @spec error?(any()) :: boolean()
-  def error?(any), do: match?({:error, _}, any)
+  def error?(a), do: match?({:error, _}, a)
 
   @doc """
   Given a list of Either, it returns `{:ok, list}` if every element of the list is of type `{:ok, _}`. Otherwise the first `{:error, _}` is returned.
@@ -167,14 +167,14 @@ defmodule Noether.Either do
       {:error, 1}
   """
   @spec sequence([either()]) :: {:ok, [any()]} | {:error, any()}
-  def sequence(list) do
-    list
+  def sequence(a) do
+    a
     |> Enum.reduce(
       {:ok, []},
       fn
-        _, e = {:error, _} -> e
-        e = {:error, _}, _ -> e
-        {:ok, value}, {:ok, acc} -> {:ok, [value | acc]}
+        _, error = {:error, _} -> error
+        error = {:error, _}, _ -> error
+        {:ok, b}, {:ok, acc} -> {:ok, [b | acc]}
       end
     )
     |> map(&Enum.reverse/1)
@@ -192,8 +192,8 @@ defmodule Noether.Either do
       {:error, 2}
   """
   @spec map_error(either(), fun1()) :: either()
-  def map_error(k = {:ok, _}, _), do: k
-  def map_error({:error, value}, f) when is_function(f, 1), do: {:error, f.(value)}
+  def map_error(a = {:ok, _}, _), do: a
+  def map_error({:error, a}, f) when is_function(f, 1), do: {:error, f.(a)}
 
   @doc """
   Given an Either and two functions, it applies the first or second one on the second value of the tuple, depending if the value is `{:ok, _}` or `{:error, _}` respectively.
@@ -207,8 +207,8 @@ defmodule Noether.Either do
       {:error, 3}
   """
   @spec either(either(), fun1(), fun1()) :: either()
-  def either(k = {:ok, _}, f, _) when is_function(f, 1), do: map(k, f)
-  def either({:error, value}, _, g) when is_function(g, 1), do: {:error, g.(value)}
+  def either(a = {:ok, _}, f, _) when is_function(f, 1), do: map(a, f)
+  def either({:error, a}, _, g) when is_function(g, 1), do: {:error, g.(a)}
 
   @doc """
   Given a list of Either, the function is mapped only on the elements of type `{:ok, _}`. Other values will be discarded. A list of the results is returned outside of the tuple.
@@ -222,13 +222,13 @@ defmodule Noether.Either do
       [2, 4]
   """
   @spec cat_either([either()], fun1()) :: [any()]
-  def cat_either(list, f) when is_function(f, 1) do
-    list
+  def cat_either(a, f) when is_function(f, 1) do
+    a
     |> Enum.reduce(
       [],
       fn
         {:error, _}, acc -> acc
-        {:ok, value}, acc -> [f.(value) | acc]
+        {:ok, b}, acc -> [f.(b) | acc]
       end
     )
     |> Enum.reverse()

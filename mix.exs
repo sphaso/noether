@@ -18,7 +18,7 @@ defmodule Noether.MixProject do
 
   defp package do
     [
-      maintainers: ["Tommaso Pifferi", "Giovanni Ornaghi"],
+      maintainers: ["Tommaso Pifferi", "Simone Cottini", "Giovanni Ornaghi"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/sphaso/noether"}
     ]

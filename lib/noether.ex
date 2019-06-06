@@ -10,6 +10,9 @@ defmodule Noether do
   The root module has a few simple functions one might find of use.
   """
 
+  @type fun1 :: (any() -> any())
+  @type fun2 :: (any(), any() -> any())
+
   @doc """
   Takes a tuple and a function of arity 2. It applies the two values in the tuple to the function.
 
@@ -18,8 +21,8 @@ defmodule Noether do
       iex> curry({1, 2}, &Kernel.+/2)
       3
   """
-  @spec curry(tuple(), fun()) :: any()
-  def curry({a, b}, f), do: f.(a, b)
+  @spec curry(tuple(), fun2()) :: any()
+  def curry({a, b}, f) when is_function(f, 2), do: f.(a, b)
 
   @doc """
   Takes two values and applies them to a function or arity 1 in form of a tuple.
@@ -29,8 +32,8 @@ defmodule Noether do
       iex> uncurry(1, 2, &(&1))
       {1, 2}
   """
-  @spec uncurry(any(), any(), fun()) :: any()
-  def uncurry(a, b, f), do: f.({a, b})
+  @spec uncurry(any(), any(), fun1()) :: any()
+  def uncurry(a, b, f) when is_function(f, 1), do: f.({a, b})
 
   @doc """
   Takes a function of arity 2 and returns the same function with its arguments in reverse order, i.e., "flipped".
@@ -41,6 +44,6 @@ defmodule Noether do
       iex> flip(&Kernel.-/2).(3, 4)
       1
   """
-  @spec flip(fun()) :: fun()
-  def flip(f), do: fn a, b -> f.(b, a) end
+  @spec flip(fun2()) :: fun2()
+  def flip(f) when is_function(f, 2), do: fn a, b -> f.(b, a) end
 end

@@ -2,6 +2,7 @@ defmodule Noether.Maybe do
   @moduledoc nil
 
   alias Noether.Either
+  @type fun1 :: (any() -> any())
 
   @doc """
   Given a value and a function, the function is applied only if the value is different from `nil`. `nil` is returned otherwise.
@@ -14,9 +15,9 @@ defmodule Noether.Maybe do
       iex> map(-1, &Kernel.abs/1)
       1
   """
-  @spec map(any(), fun()) :: any()
+  @spec map(any(), fun1()) :: any()
   def map(nil, _), do: nil
-  def map(v, f), do: f.(v)
+  def map(a, f) when is_function(f, 1), do: f.(a)
 
   @doc """
   Given a value and a default, `{:ok, value}` is returned only if the value is different from `nil`. `{:error, default}` is returned otherwise.
@@ -31,7 +32,7 @@ defmodule Noether.Maybe do
   """
   @spec required(any(), any()) :: Either.either()
   def required(nil, default), do: {:error, default}
-  def required(v, _), do: {:ok, v}
+  def required(a, _), do: {:ok, a}
 
   @doc """
   Given a list, it returns `{:ok, list}` if every element of the list is different from nil. Otherwise `{:error, :nil_found}` is returned.
@@ -45,14 +46,14 @@ defmodule Noether.Maybe do
       {:error, :nil_found}
   """
   @spec sequence([any()]) :: Either.either()
-  def sequence(list) do
-    list
+  def sequence(a) do
+    a
     |> Enum.reduce(
       {:ok, []},
       fn
-        _, e = {:error, _} -> e
+        _, error = {:error, _} -> error
         nil, _ -> {:error, :nil_found}
-        value, {:ok, acc} -> {:ok, [value | acc]}
+        b, {:ok, acc} -> {:ok, [b | acc]}
       end
     )
     |> Either.map(&Enum.reverse/1)
@@ -69,9 +70,9 @@ defmodule Noether.Maybe do
       iex> maybe(nil, &Kernel.abs/1, :hello)
       :hello
   """
-  @spec maybe(any(), fun(), any()) :: any()
+  @spec maybe(any(), fun1(), any()) :: any()
   def maybe(nil, _, default), do: default
-  def maybe(value, f, _), do: f.(value)
+  def maybe(a, f, _) when is_function(f, 1), do: f.(a)
 
   @doc """
   Given a list of values, the function is mapped only on the elements different from `nil`. `nil` values will be discarded. A list of the results is returned.
@@ -83,12 +84,12 @@ defmodule Noether.Maybe do
       iex> cat_maybe([1, nil, 3], &(&1 + 1))
       [2, 4]
   """
-  @spec cat_maybe([any()], fun()) :: [any()]
-  def cat_maybe(list, f) do
-    list
+  @spec cat_maybe([any()], fun1()) :: [any()]
+  def cat_maybe(a, f) when is_function(f, 1) do
+    a
     |> Enum.reduce([], fn
       nil, acc -> acc
-      a, acc -> [f.(a) | acc]
+      b, acc -> [f.(b) | acc]
     end)
     |> Enum.reverse()
   end
@@ -107,8 +108,8 @@ defmodule Noether.Maybe do
       iex> choose(0, fn _ -> nil end, fn _ -> nil end)
       nil
   """
-  @spec choose(any(), fun(), fun()) :: any()
-  def choose(a, f, g) do
+  @spec choose(any(), fun1(), fun1()) :: any()
+  def choose(a, f, g) when is_function(f, 1) and is_function(g, 1) do
     b = f.(a)
 
     if is_nil(b) do
