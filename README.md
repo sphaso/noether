@@ -32,7 +32,7 @@ Without Noether, you would write something like this:
 ```elixir
 function_that_returns_list_of_items()
 |> List.first()
-|> update_item(& &1)
+|> update_item(&f/1)
 |> case do
   nil ->
     {:error, :not_found}
@@ -54,6 +54,7 @@ alias Noether.Maybe
 
 function_that_returns_list_of_items()
 |> List.first()
+|> Maybe.map(&f/1)
 |> Maybe.required(:not_found)
 ```
 
