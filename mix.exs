@@ -20,7 +20,8 @@ defmodule Noether.MixProject do
     [
       maintainers: ["Tommaso Pifferi", "Simone Cottini", "Giovanni Ornaghi"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/sphaso/noether"}
+      links: %{"GitHub" => "https://github.com/sphaso/noether"},
+      source_url: "https://github.com/sphaso/noether"
     ]
   end
 
