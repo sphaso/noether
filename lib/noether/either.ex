@@ -104,7 +104,7 @@ defmodule Noether.Either do
   def wrap(a), do: {:ok, a}
 
   @doc """
-  It returns the value of an `{:ok, value}` only if such a tuple is given. If not, `nil` is returned.
+  It returns the value of an `{:ok, value}` only if such a tuple is given. If not, the default value (`nil` if not provided) is returned.
 
   ## Examples
 
@@ -113,10 +113,17 @@ defmodule Noether.Either do
 
       iex> unwrap(2)
       nil
+
+      iex> unwrap({:ok, 1}, :default_value)
+      1
+
+      iex> unwrap(2, :default_value)
+      :default_value
   """
-  @spec unwrap({:ok, any()}) :: any()
-  def unwrap({:ok, a}), do: a
-  def unwrap(_), do: nil
+  @spec unwrap(any()) :: any()
+  def unwrap(a, b \\ nil)
+  def unwrap({:ok, a}, _), do: a
+  def unwrap(_, default), do: default
 
   @doc """
   It returns `true` only if the value given matches a `{:ok, value}` type.
