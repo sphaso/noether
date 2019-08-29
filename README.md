@@ -105,4 +105,4 @@ Feel free to propose any function you deem useful and even vaguely related to th
 
 `mix test` runs the tests.    
 `mix format.all` formats all the files under `lib/`.    
-`mix check` checks if the files are formatted; it then runs a linter (`credo`) and a type checker ('dyalixir').    
+`mix check` checks if the files are formatted; it then runs a linter (`credo`) and a type checker (`dyalixir`).    
