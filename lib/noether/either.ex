@@ -169,12 +169,12 @@ defmodule Noether.Either do
   @spec sequence([either()]) :: {:ok, [any()]} | {:error, any()}
   def sequence(a) do
     a
-    |> Enum.reduce(
+    |> Enum.reduce_while(
       {:ok, []},
       fn
-        _, error = {:error, _} -> error
-        error = {:error, _}, _ -> error
-        {:ok, b}, {:ok, acc} -> {:ok, [b | acc]}
+        _, error = {:error, _} -> {:halt, error}
+        error = {:error, _}, _ -> {:halt, error}
+        {:ok, b}, {:ok, acc} -> {:cont, {:ok, [b | acc]}}
       end
     )
     |> map(&Enum.reverse/1)

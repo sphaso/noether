@@ -48,12 +48,12 @@ defmodule Noether.Maybe do
   @spec sequence([any()]) :: Either.either()
   def sequence(a) do
     a
-    |> Enum.reduce(
+    |> Enum.reduce_while(
       {:ok, []},
       fn
-        _, error = {:error, _} -> error
-        nil, _ -> {:error, :nil_found}
-        b, {:ok, acc} -> {:ok, [b | acc]}
+        _, error = {:error, _} -> {:halt, error}
+        nil, _ -> {:halt, {:error, :nil_found}}
+        b, {:ok, acc} -> {:cont, {:ok, [b | acc]}}
       end
     )
     |> Either.map(&Enum.reverse/1)
