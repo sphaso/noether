@@ -2,6 +2,7 @@ defmodule Noether.List do
   @moduledoc nil
 
   import Noether
+  alias Noether.Either
 
   @type fun1 :: (any() -> any())
   @type fun2 :: (any(), any() -> any())
