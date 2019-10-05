@@ -74,11 +74,11 @@ end
 It can easily get frustrating and error-prone to write everytime the same `{:ok, _}` matches. Let's see how we can do this using Noether:
 
 ```elixir
-alias Noether.Either
+alias Noether.List
 
 [f1(), f2(), f3(), f4()]
-|> Either.sequence()
-|> Either.unwrap()
+|> List.sequence()
+|> List.unwrap()
 ```
 
 Easier to read, less verbose, and it encapsulates the handling of `{:ok, _}` tuples. You can focus on writing actual logic instead of repeating the same pattern matches every time.
