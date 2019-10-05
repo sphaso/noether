@@ -45,4 +45,41 @@ defmodule Noether.List do
         [a] ++ until(p, f, f.(a))
     end
   end
+
+  @doc """
+  Given a list, it returns `{:ok, list}` if every element of the list is different from nil. Otherwise `{:error, :nil_found}` is returned.
+
+  ## Examples
+
+      iex> sequence([1, 2])
+      {:ok, [1, 2]}
+
+      iex> sequence([1, nil, 3])
+      {:error, :nil_found}
+
+      iex> sequence([{:ok, 1}, {:ok, 2}])
+      {:ok, [1, 2]}
+
+      iex> sequence([{:ok, 1}, {:error, 2}, {:ok, 3}])
+      {:error, 2}
+
+      iex> sequence([{:error, 1}, {:error, 2}])
+      {:error, 1}
+
+  """
+  @spec sequence([any()]) :: {:ok, [any()]} | {:error, any()}
+  def sequence(a) do
+    a
+    |> Enum.reduce_while(
+      {:ok, []},
+      fn
+        _, error = {:error, _} -> {:halt, error}
+        error = {:error, _}, _ -> {:halt, error}
+        nil, _ -> {:halt, {:error, :nil_found}}
+        {:ok, b}, {:ok, acc} -> {:cont, {:ok, [b | acc]}}
+        b, {:ok, acc} -> {:cont, {:ok, [b | acc]}}
+      end
+    )
+    |> Either.map(&Enum.reverse/1)
+  end
 end

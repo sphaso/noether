@@ -160,34 +160,6 @@ defmodule Noether.Either do
   def error?(a), do: match?({:error, _}, a)
 
   @doc """
-  Given a list of Either, it returns `{:ok, list}` if every element of the list is of type `{:ok, _}`. Otherwise the first `{:error, _}` is returned.
-
-  ## Examples
-
-      iex> sequence([{:ok, 1}, {:ok, 2}])
-      {:ok, [1, 2]}
-
-      iex> sequence([{:ok, 1}, {:error, 2}, {:ok, 3}])
-      {:error, 2}
-
-      iex> sequence([{:error, 1}, {:error, 2}])
-      {:error, 1}
-  """
-  @spec sequence([either()]) :: {:ok, [any()]} | {:error, any()}
-  def sequence(a) do
-    a
-    |> Enum.reduce_while(
-      {:ok, []},
-      fn
-        _, error = {:error, _} -> {:halt, error}
-        error = {:error, _}, _ -> {:halt, error}
-        {:ok, b}, {:ok, acc} -> {:cont, {:ok, [b | acc]}}
-      end
-    )
-    |> map(&Enum.reverse/1)
-  end
-
-  @doc """
   Given an Either and one function, it applies the function to the `{:error, _}` tuple.
 
   ## Examples
