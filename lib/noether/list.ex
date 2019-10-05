@@ -48,7 +48,7 @@ defmodule Noether.List do
   end
 
   @doc """
-  Given a list, it returns `{:ok, list}` if every element of the list is different from nil or error. Otherwise `{:error, :nil_found}` is returned.
+  Given a list, it returns `{:ok, list}` if every element of the list is different from nil or `{:error, _}`. Otherwise `{:error, :nil_found}` is returned.
 
   ## Examples
 
