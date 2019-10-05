@@ -75,9 +75,10 @@ It can easily get frustrating and error-prone to write everytime the same `{:ok,
 
 ```elixir
 alias Noether.Either
+alias Noether.List
 
 [f1(), f2(), f3(), f4()]
-|> Either.sequence()
+|> List.sequence()
 |> Either.unwrap()
 ```
 

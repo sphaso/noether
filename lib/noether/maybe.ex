@@ -35,31 +35,6 @@ defmodule Noether.Maybe do
   def required(a, _), do: {:ok, a}
 
   @doc """
-  Given a list, it returns `{:ok, list}` if every element of the list is different from nil. Otherwise `{:error, :nil_found}` is returned.
-
-  ## Examples
-
-      iex> sequence([1, 2])
-      {:ok, [1, 2]}
-
-      iex> sequence([1, nil, 3])
-      {:error, :nil_found}
-  """
-  @spec sequence([any()]) :: Either.either()
-  def sequence(a) do
-    a
-    |> Enum.reduce_while(
-      {:ok, []},
-      fn
-        _, error = {:error, _} -> {:halt, error}
-        nil, _ -> {:halt, {:error, :nil_found}}
-        b, {:ok, acc} -> {:cont, {:ok, [b | acc]}}
-      end
-    )
-    |> Either.map(&Enum.reverse/1)
-  end
-
-  @doc """
   Given a value, a function, and a default, it applies the function on the value if the latter is different from `nil`. It returns the default otherwise.
 
   ## Examples
