@@ -3,7 +3,7 @@ defmodule Noether.ListTest do
   doctest Noether.List, import: true
   use ExUnitProperties
 
-  property "" do
+  property "verify all the rules for Noether.List.sequence" do
     check all list <- list_of(integer()) do
       assert(
         case Noether.List.sequence(list) do
