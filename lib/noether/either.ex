@@ -104,6 +104,25 @@ defmodule Noether.Either do
   def wrap(a), do: {:ok, a}
 
   @doc """
+  Given any value, it makes sure the result is an Either type.
+
+  ## Examples
+
+      iex> wrap_err({:ok, 1})
+      {:ok, 1}
+
+      iex> wrap_err({:error, 2})
+      {:error, 2}
+
+      iex> wrap_err(3)
+      {:error, 3}
+  """
+  @spec wrap_err(any()) :: either()
+  def wrap_err(a = {:ok, _}), do: a
+  def wrap_err(a = {:error, _}), do: a
+  def wrap_err(a), do: {:error, a}
+
+  @doc """
   It returns the value of an `{:ok, value}` only if such a tuple is given. If not, the default value (`nil` if not provided) is returned.
 
   ## Examples
