@@ -37,7 +37,7 @@ defmodule Noether.MixProject do
     [
       {:credo, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.19", only: :dev},
-      {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.7", only: :dev, runtime: false},
       {:stream_data, "~> 0.1", only: :test}
     ]
   end
@@ -47,7 +47,7 @@ defmodule Noether.MixProject do
       check: [
         "format --check-formatted mix.exs \"lib/**/*.{ex,exs}\" \"test/**/*.{ex,exs}\" \"priv/**/*.{ex,exs}\" \"config/**/*.{ex,exs}\"",
         "credo",
-        "dialyzer --halt-exit-status"
+        "dialyzer"
       ],
       "format.all": [
         "format mix.exs \"lib/**/*.{ex,exs}\" \"test/**/*.{ex,exs}\" \"priv/**/*.{ex,exs}\" \"config/**/*.{ex,exs}\""
