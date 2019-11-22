@@ -28,25 +28,6 @@ defmodule Noether.Either do
 
   ## Examples
 
-      iex> flat_map({:ok, 1}, &{:ok, &1 + 1})
-      {:ok, 2}
-
-      iex> flat_map({:ok, 1}, &{:error, &1 + 1})
-      {:error, 2}
-
-      iex> flat_map({:error, "Value not found"}, &{:ok, &1 + 1})
-      {:error, "Value not found"}
-  """
-  @spec flat_map(either(), fun1()) :: either()
-  def flat_map({:ok, a}, f) when is_function(f, 1), do: f.(a)
-  def flat_map(a = {:error, _}, _), do: a
-
-  @doc """
-  Given an `{:ok, {:ok, value}}` it flattens the ok unwrapping the `value` and returning `{:ok, value}`.
-  If an `{:error, _}` is given, it is returned as-is.
-
-  ## Examples
-
       iex> join({:ok, {:ok, 1}})
       {:ok, 1}
 
