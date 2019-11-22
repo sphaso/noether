@@ -194,6 +194,34 @@ defmodule Noether.Either do
   def map_error({:error, a}, f) when is_function(f, 1), do: {:error, f.(a)}
 
   @doc """
+  Given a list of values and a function returning `{:ok, any}` or `{:error, any}`, it applies the function on every
+  `value` returning `{:ok, values}` if every `f.(v)` results in `{:ok, v}`; returning `{:error, _}` if `f.(v) results in
+  an `{:error, any}.
+
+  ## Examples
+
+      iex> map_all(["23:50:07.0123456", "23:50:07.123Z"], &Time.from_iso8601/1)
+      {:ok, [~T[23:50:07.012345], ~T[23:50:07.123]]}
+
+      iex> map_all(["23:50:61", "23:50:07.123Z"], &Time.from_iso8601/1)
+      {:error, :invalid_time}
+  """
+  @spec map_all([any()], (any() -> either())) :: {:ok, [any()]} | {:error, any()}
+  def map_all(values, f) when is_function(f, 1) do
+    values
+    |> Enum.reduce_while(
+      {:ok, []},
+      fn value, {:ok, acc} ->
+        case f.(value) do
+          {:ok, value} -> {:cont, {:ok, [value | acc]}}
+          {:error, _} = error -> {:halt, error}
+        end
+      end
+    )
+    |> map(&Enum.reverse/1)
+  end
+
+  @doc """
   Given an Either and two functions, it applies the first or second one on the second value of the tuple, depending if the value is `{:ok, _}` or `{:error, _}` respectively.
 
   ## Examples
