@@ -4,7 +4,7 @@ defmodule Noether.ListTest do
   use ExUnitProperties
 
   property "verify all the rules for Noether.List.sequence" do
-    check all list <- list_of(integer()) do
+    check all(list <- list_of(integer())) do
       assert(
         case Noether.List.sequence(list) do
           {:ok, _} ->

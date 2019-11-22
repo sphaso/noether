@@ -28,21 +28,17 @@ defmodule Noether.Either do
 
   ## Examples
 
-      iex> flat_map({:ok, {:ok, 1}}, &(&1 + 1))
+      iex> flat_map({:ok, 1}, &{:ok, &1 + 1})
       {:ok, 2}
 
-      iex> flat_map({:ok, {:error, "Value not found"}}, &(&1 + 1))
-      {:error, "Value not found"}
+      iex> flat_map({:ok, 1}, &{:error, &1 + 1})
+      {:error, 2}
 
-      iex> flat_map({:ok, 1}, &(&1 + 1))
-      ** (FunctionClauseError) no function clause matching in Noether.Either.flat_map/2
-
-      iex> flat_map({:error, "Value not found"}, &(&1 + 1))
+      iex> flat_map({:error, "Value not found"}, &{:ok, &1 + 1})
       {:error, "Value not found"}
   """
   @spec flat_map(either(), fun1()) :: either()
-  def flat_map({:ok, {:ok, a}}, f) when is_function(f, 1), do: {:ok, f.(a)}
-  def flat_map({:ok, {:error, a}}, _), do: {:error, a}
+  def flat_map({:ok, a}, f) when is_function(f, 1), do: f.(a)
   def flat_map(a = {:error, _}, _), do: a
 
   @doc """
