@@ -198,12 +198,13 @@ defmodule Noether.Either do
   `value` returning `{:ok, values}` if every `f.(v)` results in `{:ok, v}`; returning `{:error, _}` if `f.(v) results in
   an `{:error, any}.
 
-  ## EXAMPLES
-    iex> map_all(["23:50:07.0123456", "23:50:07.123Z"], &Time.from_iso8601/1)
-    {:ok, [~T[23:50:07.012345], ~T[23:50:07.123]]}
+  ## Examples
 
-    iex> map_all(["23:50:61", "23:50:07.123Z"], &Time.from_iso8601/1)
-    {:error, :invalid_time}
+      iex> map_all(["23:50:07.0123456", "23:50:07.123Z"], &Time.from_iso8601/1)
+      {:ok, [~T[23:50:07.012345], ~T[23:50:07.123]]}
+
+      iex> map_all(["23:50:61", "23:50:07.123Z"], &Time.from_iso8601/1)
+      {:error, :invalid_time}
   """
   @spec map_all([any()], (any() -> either())) :: {:ok, [any()]} | {:error, any()}
   def map_all(values, f) when is_function(f, 1) do
