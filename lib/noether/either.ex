@@ -43,6 +43,23 @@ defmodule Noether.Either do
   def join(a = {:error, _}), do: a
 
   @doc """
+  Alias for `join/1`.
+
+  ## Examples
+
+      iex> flatten({:ok, {:ok, 1}})
+      {:ok, 1}
+
+      iex> flatten({:ok, 1})
+      ** (FunctionClauseError) no function clause matching in Noether.Either.join/1
+
+      iex> flatten({:error, "Value not found"})
+      {:error, "Value not found"}
+  """
+  @spec flatten(either()) :: either()
+  defdelegate flatten(either), to: __MODULE__, as: :join
+
+  @doc """
   Given an `{:ok, value}` and a function that returns an Either value, it applies the function on the `value`. It effectively "squashes" an `{:ok, {:ok, v}}` or `{:ok, {:error, _}}` to its most appropriate representation.
   If an `{:error, _}` is given, it is returned as-is.
 
@@ -60,6 +77,23 @@ defmodule Noether.Either do
   @spec bind(either(), fun1()) :: either()
   def bind({:ok, a}, f) when is_function(f, 1), do: f.(a)
   def bind(a = {:error, _}, _), do: a
+
+  @doc """
+  Alias for `bind/2`
+
+  ## Examples
+
+      iex> flat_map({:ok, 1}, fn a -> {:ok, a + 1} end)
+      {:ok, 2}
+
+      iex> flat_map({:ok, 1}, fn _ -> {:error, 5} end)
+      {:error, 5}
+
+      iex> flat_map({:error, 1}, fn _ -> {:ok, 45} end)
+      {:error, 1}
+  """
+  @spec flat_map(either(), fun1()) :: either()
+  defdelegate flat_map(either, f), to: __MODULE__, as: :bind
 
   @doc """
   Given any value, it makes sure the result is an Either type.
