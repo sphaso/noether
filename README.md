@@ -103,6 +103,9 @@ NList.zip_with([1, 2, 3], [4, 5, 6], &(&1 + &2))
 ## Contributing
 
 Feel free to propose any function you deem useful and even vaguely related to the ones currently present.    
+Regarding naming, we have a couple of conventions:    
+- function names should be taken from Haskell if they exist, aliases with Scala naming are possible (e.g. `bind` is aliased into `flat_map`)    
+- function arguments are named `a, b, c ...` if values (exception: `default`), `f, g, h ...` if functions    
 
 `mix test` runs the tests.    
 `mix format.all` formats all the files under `lib/`.    

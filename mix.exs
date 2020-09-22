@@ -35,9 +35,9 @@ defmodule Noether.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:credo, "~> 1.0", only: :dev, runtime: false},
+      {:credo, "~> 1.4", only: :dev, runtime: false},
       {:ex_doc, "~> 0.19", only: :dev},
-      {:dialyxir, "~> 1.0.0-rc.7", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0.0", only: :dev, runtime: false},
       {:stream_data, "~> 0.1", only: :test}
     ]
   end
