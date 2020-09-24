@@ -112,6 +112,6 @@ Regarding naming, we have a couple of conventions:
 `mix check` checks if the files are formatted; it then runs a linter (`credo`) and a type checker (`dyalixir`).    
 
 ## Special thanks to our contributors!
-- (https://github.com/kmos)[Giovanni Panice]    
-- (https://github.com/pablocostass)[Pablo Costas]    
-- (https://github.com/paolosimone)[Paolo Simone]
+- [Giovanni Panice](https://github.com/kmos)
+- [Pablo Costas](https://github.com/pablocostass)
+- [Paolo Simone](https://github.com/paolosimone)
