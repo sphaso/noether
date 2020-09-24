@@ -16,7 +16,7 @@ The root module has a few simple functions one might find of use.
 ```elixir
 def deps do
   [
-    {:noether, "~> 0.2.1"}
+    {:noether, "~> 0.2.2"}
   ]
 end
 ```
@@ -110,3 +110,8 @@ Regarding naming, we have a couple of conventions:
 `mix test` runs the tests.    
 `mix format.all` formats all the files under `lib/`.    
 `mix check` checks if the files are formatted; it then runs a linter (`credo`) and a type checker (`dyalixir`).    
+
+## Special thanks to our contributors!
+- (https://github.com/kmos)[Giovanni Panice]    
+- (https://github.com/pablocostass)[Pablo Costas]    
+- (https://github.com/paolosimone)[Paolo Simone]
