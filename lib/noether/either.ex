@@ -23,6 +23,27 @@ defmodule Noether.Either do
   def map(a = {:error, _}, _), do: a
 
   @doc """
+  Given a `value` and a function, it applies the function on the `value` returning `{:ok, f.(value)}`.
+  If the function throws an exception `e` then it is wrapped into an `{:error, e}`.
+
+  ## Examples
+
+      iex> try("42", &String.to_integer/1)
+      {:ok, 42}
+
+      iex> try("nan", &String.to_integer/1)
+      {:error, %ArgumentError{message: "argument error"}}
+  """
+  @spec try(any(), fun1()) :: either()
+  def try(value, f) when is_function(f, 1) do
+    try do
+      {:ok, f.(value)}
+    rescue
+      e -> {:error, e}
+    end
+  end
+
+  @doc """
   Given an `{:ok, {:ok, value}}` it flattens the ok unwrapping the `value` and returning `{:ok, value}`.
   If an `{:error, _}` is given, it is returned as-is.
 
