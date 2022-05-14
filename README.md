@@ -1,6 +1,6 @@
 # Noether
 
-[![Build Status](https://travis-ci.com/sphaso/noether.svg?branch=master)](https://travis-ci.com/sphaso/noether)
+[![Build Status](https://travis-ci.com/sphaso/noether.svg?branch=main)](https://travis-ci.com/sphaso/noether)
 
 Noether aims to ease common data manipulation tasks by introducing simple algebraic functions and other utilities.
 Functions and names are inspired (sometimes taken as-is) from Haskell.
@@ -16,7 +16,7 @@ The root module has a few simple functions one might find of use.
 ```elixir
 def deps do
   [
-    {:noether, "~> 0.2.2"}
+    {:noether, "~> 0.2.3"}
   ]
 end
 ```
