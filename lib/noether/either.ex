@@ -32,7 +32,7 @@ defmodule Noether.Either do
       {:ok, 42}
 
       iex> try("nan", &String.to_integer/1)
-      {:error, %ArgumentError{message: "argument error"}}
+      {:error, %ArgumentError{message: "errors were found at the given arguments:\\n\\n  * 1st argument: not a textual representation of an integer\\n"}}
   """
   @spec try(any(), fun1()) :: either()
   def try(value, f) when is_function(f, 1) do

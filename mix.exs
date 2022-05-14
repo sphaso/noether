@@ -4,8 +4,8 @@ defmodule Noether.MixProject do
   def project do
     [
       app: :noether,
-      version: "0.2.2",
-      elixir: "~> 1.8",
+      version: "0.2.3",
+      elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       dialyzer: [plt_add_deps: :transitive],
@@ -35,10 +35,10 @@ defmodule Noether.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:credo, "~> 1.4", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.19", only: :dev},
-      {:dialyxir, "~> 1.0.0", only: :dev, runtime: false},
-      {:stream_data, "~> 0.1", only: :test}
+      {:credo, "~> 1.6.4", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.28.4", only: :dev},
+      {:dialyxir, "~> 1.1", only: :dev, runtime: false},
+      {:stream_data, "~> 0.5", only: :test}
     ]
   end
 
