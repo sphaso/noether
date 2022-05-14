@@ -1,6 +1,6 @@
 # Noether
 
-[![Build Status](https://travis-ci.com/sphaso/noether.svg?branch=main)](https://travis-ci.com/sphaso/noether)
+[![Build Status](https://github.com/sphaso/noether/actions/workflows/elixir.yml/badge.svg?branch=main)](https://github.com/sphaso/noether/actions/workflows/elixir.yml)
 
 Noether aims to ease common data manipulation tasks by introducing simple algebraic functions and other utilities.
 Functions and names are inspired (sometimes taken as-is) from Haskell.
