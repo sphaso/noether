@@ -306,7 +306,7 @@ defmodule Noether.Either do
       iex> choose(0, fn _ -> {:error, 1} end, fn _ -> {:error, 2} end)
       {:error, 2}
   """
-  @spec choose(either(), fun1(), fun1()) :: either()
+  @spec choose(any(), fun1(), fun1()) :: either()
   def choose(a, f, g) when is_function(f, 1) and is_function(g, 1) do
     b = f.(a)
 
