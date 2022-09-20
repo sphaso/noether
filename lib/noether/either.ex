@@ -274,19 +274,17 @@ defmodule Noether.Either do
 
   ## Examples
 
-      iex> or_else({:ok, 1}, fn -> {:ok, 2} end)
+      iex> or_else({:ok, 1}, fn _ -> {:ok, 2} end)
       {:ok, 1}
 
-      iex> or_else({:error, 1}, fn -> {:ok, 2} end)
+      iex> or_else({:error, 1}, fn _ -> {:ok, 2} end)
       {:ok, 2}
 
       iex> or_else({:error, 1}, fn x -> {:ok, x + 2} end)
       {:ok, 3}
   """
-  @spec or_else(either(), fun0() | fun1()) :: either()
-  def or_else(a = {:ok, _}, _), do: a
-  def or_else({:error, _error}, f) when is_function(f, 0), do: f.()
-  def or_else({:error, error}, f) when is_function(f, 1), do: f.(error)
+  @spec or_else(either(), fun1()) :: either()
+  def or_else(a, f), do: choose(a, & &1, fn {_, e} -> f.(e) end)
 
   @doc """
   Given a list of Either, the function is mapped only on the elements of type `{:ok, _}`. Other values will be discarded. A list of the results is returned outside of the tuple.
