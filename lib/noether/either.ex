@@ -4,6 +4,7 @@ defmodule Noether.Either do
   These type of values will be then called `Either`.
   """
   @type either :: {:ok, any()} | {:error, any()}
+  @type fun0 :: (() -> any())
   @type fun1 :: (any() -> any())
 
   @doc """
@@ -267,6 +268,23 @@ defmodule Noether.Either do
   @spec either(either(), fun1(), fun1()) :: either()
   def either(a = {:ok, _}, f, _) when is_function(f, 1), do: map(a, f)
   def either({:error, a}, _, g) when is_function(g, 1), do: {:error, g.(a)}
+
+  @doc """
+  Given an Either and a function, it returns the value as-is when it's ok, or executes the function and returns its result.
+
+  ## Examples
+
+      iex> or_else({:ok, 1}, fn _ -> {:ok, 2} end)
+      {:ok, 1}
+
+      iex> or_else({:error, 1}, fn _ -> {:ok, 2} end)
+      {:ok, 2}
+
+      iex> or_else({:error, 1}, fn x -> {:ok, x + 2} end)
+      {:ok, 3}
+  """
+  @spec or_else(either(), fun1()) :: either()
+  def or_else(a, f), do: choose(a, & &1, fn {_, e} -> f.(e) end)
 
   @doc """
   Given a list of Either, the function is mapped only on the elements of type `{:ok, _}`. Other values will be discarded. A list of the results is returned outside of the tuple.
