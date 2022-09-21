@@ -16,7 +16,7 @@ The root module has a few simple functions one might find of use.
 ```elixir
 def deps do
   [
-    {:noether, "~> 0.2.3"}
+    {:noether, "~> 0.2.4"}
   ]
 end
 ```
@@ -115,3 +115,4 @@ Regarding naming, we have a couple of conventions:
 - [Giovanni Panice](https://github.com/kmos)
 - [Pablo Costas](https://github.com/pablocostass)
 - [Paolo Simone](https://github.com/paolosimone)
+- [Fabio Vitale](https://github.com/c0m3tx)
