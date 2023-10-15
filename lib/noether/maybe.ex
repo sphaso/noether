@@ -89,6 +89,12 @@ defmodule Noether.Maybe do
   """
   @spec choose(any(), fun1(), fun1()) :: any()
   def choose(a, f, g) when is_function(f, 1) and is_function(g, 1) do
-    maybe(a, f, map(a, g))
+    b = f.(a)
+
+    if is_nil(b) do
+      g.(a)
+    else
+      b
+    end
   end
 end
