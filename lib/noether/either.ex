@@ -4,7 +4,7 @@ defmodule Noether.Either do
   These type of values will be then called `Either`.
   """
   @type either :: {:ok, any()} | {:error, any()}
-  @type fun0 :: (() -> any())
+  @type fun0 :: (-> any())
   @type fun1 :: (any() -> any())
 
   @doc """
@@ -60,8 +60,7 @@ defmodule Noether.Either do
       {:error, "Value not found"}
   """
   @spec join(either()) :: either()
-  def join({:ok, {:ok, a}}), do: {:ok, a}
-  def join({:ok, {:error, a}}), do: {:error, a}
+  def join(a = {_, {_, _}}), do: bind(a, & &1)
   def join(a = {:error, _}), do: a
 
   @doc """
@@ -84,6 +83,7 @@ defmodule Noether.Either do
   @doc """
   Given an `{:ok, value}` and a function that returns an Either value, it applies the function on the `value`. It effectively "squashes" an `{:ok, {:ok, v}}` or `{:ok, {:error, _}}` to its most appropriate representation.
   If an `{:error, _}` is given, it is returned as-is.
+  Please be careful and only use bind with functions that return either {:ok, _} or {:error, _}, otherwise you will break the Associativity law.
 
   ## Examples
 
