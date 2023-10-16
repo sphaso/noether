@@ -9,10 +9,10 @@ defmodule Noether.Maybe do
 
   ## Examples
 
-      iex> map(nil, &Kernel.abs/1)
+      iex> Noether.Maybe.map(nil, &Kernel.abs/1)
       nil
 
-      iex> map(-1, &Kernel.abs/1)
+      iex> Noether.Maybe.map(-1, &Kernel.abs/1)
       1
   """
   @spec map(any(), fun1()) :: any()
@@ -46,8 +46,12 @@ defmodule Noether.Maybe do
       :hello
   """
   @spec maybe(any(), fun1(), any()) :: any()
-  def maybe(nil, _, default), do: default
-  def maybe(a, f, _) when is_function(f, 1), do: f.(a)
+  def maybe(a, f, default) when is_function(f, 1) do
+    case map(a, f) do
+      nil -> default
+      b -> b
+    end
+  end
 
   @doc """
   Given a list of values, the function is mapped only on the elements different from `nil`. `nil` values will be discarded. A list of the results is returned.
