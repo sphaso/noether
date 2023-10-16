@@ -16,7 +16,7 @@ The root module has a few simple functions one might find of use.
 ```elixir
 def deps do
   [
-    {:noether, "~> 0.2.4"}
+    {:noether, "~> 0.2.5"}
   ]
 end
 ```
