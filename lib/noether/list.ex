@@ -15,6 +15,7 @@ defmodule Noether.List do
       iex> zip_with([1, 2, 3], [4, 5, 6], &Kernel.+/2)
       [5, 7, 9]
   """
+  @deprecated "use Enum.zip_with/3 instead"
   @spec zip_with([any()], [any()], fun2()) :: [any()]
   def zip_with(a, b, f) when is_function(f, 2) do
     a
