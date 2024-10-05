@@ -16,7 +16,7 @@ The root module has a few simple functions one might find of use.
 ```elixir
 def deps do
   [
-    {:noether, "~> 0.3.0"}
+    {:noether, "~> 1.0.0"}
   ]
 end
 ```
@@ -83,22 +83,6 @@ alias Noether.List
 ```
 
 Easier to read, less verbose, and it encapsulates the handling of `{:ok, _}` tuples. You can focus on writing actual logic instead of repeating the same pattern matches every time.
-
-After looking at `Maybe` and `Either`, let's take a look at `List`. Suppose you have two lists of numbers you want to sum in order, just like this:
-
-```elixir
-[1, 2, 3]
-|> Enum.zip([4, 5, 6])
-|> Enum.map(fn {a, b} -> a + b end)
-```
-
-Noether has a built-in `zip_with` function coming to the rescue:
-
-```elixir
-alias Noether.List, as: NList
-
-NList.zip_with([1, 2, 3], [4, 5, 6], &(&1 + &2))
-```
 
 ## Contributing
 
