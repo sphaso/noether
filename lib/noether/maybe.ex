@@ -1,5 +1,8 @@
 defmodule Noether.Maybe do
-  @moduledoc nil
+  @moduledoc """
+  This module hosts several utility functions to work with nullable values.
+  A `nil` value represents the absence of a result, similar to Haskell's `Nothing`.
+  """
 
   alias Noether.Either
   @type fun1 :: (any() -> any())

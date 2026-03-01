@@ -60,7 +60,8 @@ defmodule Noether.Either do
       {:error, "Value not found"}
   """
   @spec join(either()) :: either()
-  def join(a = {_, {_, _}}), do: bind(a, & &1)
+  def join(a = {:ok, {:ok, _}}), do: bind(a, & &1)
+  def join(a = {:ok, {:error, _}}), do: bind(a, & &1)
   def join(a = {:error, _}), do: a
 
   @doc """
