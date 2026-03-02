@@ -1,5 +1,8 @@
 defmodule Noether.List do
-  @moduledoc nil
+  @moduledoc """
+  This module hosts several utility functions to work with lists,
+  including sequential validation and recursive list building.
+  """
 
   alias Noether.Either
 
@@ -15,18 +18,15 @@ defmodule Noether.List do
   """
   @spec until(fun1(), fun1(), any()) :: [any()]
   def until(p, f, a) when is_function(p, 1) and is_function(f, 1) do
+    do_until(p, f, a, [])
+  end
+
+  defp do_until(p, f, a, acc) do
     case p.(a) do
-      nil ->
-        []
-
-      false ->
-        []
-
-      {:error, _} ->
-        []
-
-      _ ->
-        [a] ++ until(p, f, f.(a))
+      nil -> Enum.reverse(acc)
+      false -> Enum.reverse(acc)
+      {:error, _} -> Enum.reverse(acc)
+      _ -> do_until(p, f, f.(a), [a | acc])
     end
   end
 
@@ -57,7 +57,6 @@ defmodule Noether.List do
     |> Enum.reduce_while(
       {:ok, []},
       fn
-        _, error = {:error, _} -> {:halt, error}
         error = {:error, _}, _ -> {:halt, error}
         nil, _ -> {:halt, {:error, :nil_found}}
         {:ok, b}, {:ok, acc} -> {:cont, {:ok, [b | acc]}}
