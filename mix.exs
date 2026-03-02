@@ -8,7 +8,6 @@ defmodule Noether.MixProject do
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      dialyzer: [plt_add_deps: :transitive],
       deps: deps(),
       package: package(),
       description: "Algebra utilities for Elixir",

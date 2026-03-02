@@ -6,6 +6,7 @@ defmodule Noether.Either do
   @type either :: {:ok, any()} | {:error, any()}
   @type fun0 :: (-> any())
   @type fun1 :: (any() -> any())
+  @type fune :: (any() -> either())
 
   @doc """
   Given an `{:ok, value}` and a function, it applies the function on the `value` returning `{:ok, f.(value)}`.
@@ -96,7 +97,7 @@ defmodule Noether.Either do
       iex> bind({:error, 1}, fn _ -> {:ok, 45} end)
       {:error, 1}
   """
-  @spec bind(either(), fun1()) :: either()
+  @spec bind(either(), fune()) :: either()
   def bind({:ok, a}, f) when is_function(f, 1), do: f.(a)
   def bind(a = {:error, _}, _), do: a
 
@@ -114,7 +115,7 @@ defmodule Noether.Either do
       iex> flat_map({:error, 1}, fn _ -> {:ok, 45} end)
       {:error, 1}
   """
-  @spec flat_map(either(), fun1()) :: either()
+  @spec flat_map(either(), fune()) :: either()
   defdelegate flat_map(either, f), to: __MODULE__, as: :bind
 
   @doc """
