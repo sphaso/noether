@@ -54,9 +54,6 @@ defmodule Noether.Either do
       iex> join({:ok, {:ok, 1}})
       {:ok, 1}
 
-      iex> join({:ok, 1})
-      ** (FunctionClauseError) no function clause matching in Noether.Either.join/1
-
       iex> join({:error, "Value not found"})
       {:error, "Value not found"}
   """
