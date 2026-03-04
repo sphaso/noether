@@ -94,9 +94,7 @@ defmodule Noether.Try do
     try do
       {:ok, f.(value)}
     catch
-      :throw, reason -> {:error, reason}
-      :exit, reason -> {:error, reason}
-      :error, reason -> {:error, reason}
+      _type, reason -> {:error, reason}
     end
   end
 end
