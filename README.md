@@ -8,6 +8,7 @@ Functions and names are inspired (sometimes taken as-is) from Haskell.
 The `Maybe` module introduces operations on nullable values.
 The `Either` module introduces operations on `{:ok, _} | {:error, _}` values.
 The `List` module introduces operations on lists.
+The `Try` module wraps functions that might raise into `{:ok, _} | {:error, _}` values.
 
 The root module has a few simple functions one might find of use.
 
@@ -16,7 +17,7 @@ The root module has a few simple functions one might find of use.
 ```elixir
 def deps do
   [
-    {:noether, "~> 1.0.1"}
+    {:noether, "~> 2.0.0"}
   ]
 end
 ```
@@ -95,8 +96,3 @@ Regarding naming, we have a couple of conventions:
 `mix format.all` formats all the files under `lib/`.    
 `mix check` checks if the files are formatted; it then runs a linter (`credo`) and a type checker (`dyalixir`).    
 
-## Special thanks to our contributors!
-- [Giovanni Panice](https://github.com/kmos)
-- [Pablo Costas](https://github.com/pablocostass)
-- [Paolo Simone](https://github.com/paolosimone)
-- [Fabio Vitale](https://github.com/c0m3tx)
